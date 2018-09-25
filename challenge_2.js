@@ -6,10 +6,60 @@
   on the status (x won, o won, or cats game) you will return a string
   of the status (see the conditional checks below to see what is expected).
 */
-function checkForWinner() {
- 
-  
+
+function checkForWinner(game) {
+  let winner = 'cat'
+
+  let playsMadeByO = {
+    column0: 0,
+    column1: 0,
+    column2: 0
   }
+
+  let playsMadeByX = {
+    column0: 0,
+    column1: 0,
+    column2: 0
+  }
+
+  for(let row = 0; row < game.length; row++ ) {
+      let numberOfTimesPlayedInRowForO= 0
+      let numberOfTimesPlayedInRowForX= 0
+
+    for(let column = 0; column < game[row].length; column++){
+      if(game[row][column] === 'o'){
+        numberOfTimesPlayedInRowForO++
+        playsMadeByO[`column${column}`] += 1
+        }  
+      if(game[row][column] === 'x'){
+        numberOfTimesPlayedInRowForX++
+        playsMadeByX[`column${column}`] += 1
+        }  
+    }
+    if(numberOfTimesPlayedInRowForO === game[row].length){
+      winner = 'o'
+      break
+    }
+    if(numberOfTimesPlayedInRowForX === game[row].length){
+      winner = 'x'
+      break
+    }
+    if(playsMadeByO.column0 === game[row].length|| playsMadeByO.column1 === game[row].length || playsMadeByO.column2  === game[row].length){
+      winner = 'o'
+      break
+    }
+    if(playsMadeByX.column0 === game[row].length || playsMadeByX.column1 === game[row].length || playsMadeByX.column2 === game[row].length){
+      winner = 'x'
+      break
+    }
+    
+  }
+  // console.log('Plays Made by o in columns:', playsMadeByO.column0, playsMadeByO.column1, playsMadeByO.column2)
+  // console.log('Plays Made by x in columns:', playsMadeByX.column0, playsMadeByX.column1, playsMadeByX.column2)
+  return winner
+  }
+
+  //use for loops
 
      /*
       Hint you need to use a loop, but you will problably need more than one ;-)
@@ -28,16 +78,22 @@ function checkForWinner() {
   
     let gameTwo = [
       [ 'o', 'o', 'o'],
-      [ '', 'x', ''],
+      [ '-', 'x', '-'],
       [ '-', '-', 'x']
     ]
+  
+    // let gameThree = [
+    //   [ 'x', 'o', 'o'],
+    //   [ 'o', 'x', 'x'],
+    //   [ 'x', 'o', 'x']
+    // ]
   
     let gameThree = [
       [ 'o', 'x', 'o'],
       [ 'o', 'x', 'x'],
       [ 'x', 'o', 'x']
     ]
-  
+
     const gameOneWinner = checkForWinner(gameOne)
     const gameTwoWinner = checkForWinner(gameTwo)
     const gameThreeWinner = checkForWinner(gameThree)
