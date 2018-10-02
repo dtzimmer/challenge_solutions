@@ -10,22 +10,16 @@ function checkForWinner(game) {
     let winner = 'cat'
   
     for(let index = 0; index < game.length; index++) {
+      //counters for x's in row and column
       let xPlaysInRow = 0
       let xPlaysInColumn = 0
-  
+
+      //counters for o's in row and column
       let oPlaysInRow = 0
       let oPlaysInColumn = 0
   
-      let xForwardDiagonalPlays = 0
-      let xBackwardsDiagonalPlays = 0
-
-      let oForwardDiagonalPlays = 0
-      let oBackwardsDiagonalPlays = 0
-  
-    //   console.log('This is a row', game[index]) 
       for(let marker = 0; marker < game.length; marker++) {
          
-        // console.log('This is a game piece', game[index][marker])
         //check times played in the row
         if(game[index][marker] === 'o') {
           oPlaysInRow++
@@ -35,12 +29,7 @@ function checkForWinner(game) {
         if(game[marker][index] === 'o') {
           oPlaysInColumn++
         }
-        if(game[0][2] === 'o' && game[1][1]=== 'o' && game[2][0]==='o'){
-            oBackwardsDiagonalPlays++
-        }
-        if(game[0][0] === 'o' && game[1][1]=== 'o' && game[2][2]==='o'){
-          oForwardDiagonalPlays++
-        }
+
   
         //check times played in the row
         if(game[index][marker] === 'x') {
@@ -51,24 +40,30 @@ function checkForWinner(game) {
         if(game[marker][index] === 'x') {
           xPlaysInColumn++
         }
-        if(game[0][2] === 'x' && game[1][1]=== 'x' && game[2][0]==='x'){
-          xBackwardsDiagonalPlays++
-        }
-        if(game[0][0] === 'x' && game[1][1]=== 'x' && game[2][2]==='x'){
-          xForwardDiagonalPlays++
-        }
+
       }
-      if(oPlaysInRow === game.length || oPlaysInColumn === game.length || oBackwardsDiagonalPlays === game.length || oForwardDiagonalPlays === game.length) {
+
+      if(game[0][0] === game[1][1] && game[1][1] === game[2][2] && (game[0][0] === 'x'|| game[0][0] ==='o')){
+        winner = game[0][0]
+        break;
+      }
+
+      if(game[2][0] === game[1][1] && game[1][1] === game[0][2] && (game[2][0] === 'x'|| game[2][0] ==='o')){
+        winner = game[2][0]
+        break;
+      }
+
+      if(oPlaysInRow === game.length || oPlaysInColumn === game.length ) {
         winner = 'o'
         break;
       }
   
-      if(xPlaysInRow === game.length || xPlaysInColumn === game.length || xBackwardsDiagonalPlays === game.length || xForwardDiagonalPlays === game.length) {
+      if(xPlaysInRow === game.length || xPlaysInColumn === game.length ) {
         winner = 'x'
         break;
       }
     }
-  
+    // console.log('Before the return', winner)
     return winner
   }
   
@@ -78,19 +73,19 @@ function checkForWinner(game) {
       [ 'x', '-', 'o'],
       [ 'x', '-', 'o']
     ]
-  
+
     let gameTwo = [
       [ 'o', 'o', 'o'],
       [ '', 'x', ''],
       [ '-', '-', 'x']
     ]
-  
+
     let gameThree = [
       [ 'o', 'x', 'o'],
       [ 'o', 'x', 'x'],
       [ 'x', 'o', 'x']
     ]
-  
+
     let gameFour = [
       [ 'x', 'o', 'o'],
       [ 'o', 'x', 'x'],
@@ -139,3 +134,6 @@ function checkForWinner(game) {
   
   main()
   
+  //Other options for checking diagnols
+  //index === marker && game[index][marker]=== 'o' then increase the o forward diagnol count
+  //index + marker === game.lengths -1 && game[index][marker] === 'o' then increase the o backware diagnol count
