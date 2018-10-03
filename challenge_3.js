@@ -35,30 +35,30 @@ let friends = [{
   user: 'e582a642-e400-453f-b0f1-4aaa0a419cb5',//Jane
   friends: [
     '239ae3ce-da74-46cd-bd98-b98e9406a80b', //Bruce
-    'e7cdc763-c559-4f51-966b-cb3313bcce24',//Kim
-    '7e6a2835-0389-42ca-a4f6-321386fd6947'//Sammy
+    'e7cdc763-c559-4f51-966b-cb3313bcce24',//Sammy
+    '7e6a2835-0389-42ca-a4f6-321386fd6947'//Kim
   ]
 }, {
-  user: '239ae3ce-da74-46cd-bd98-b98e9406a80b',
+  user: '239ae3ce-da74-46cd-bd98-b98e9406a80b', //Bruce
   friends: [
-    'e582a642-e400-453f-b0f1-4aaa0a419cb5',
-    '7e6a2835-0389-42ca-a4f6-321386fd6947'
+    'e582a642-e400-453f-b0f1-4aaa0a419cb5',//Jane
+    '7e6a2835-0389-42ca-a4f6-321386fd6947'//Kim
   ]
 }, {
-  user: '7e6a2835-0389-42ca-a4f6-321386fd6947',
+  user: '7e6a2835-0389-42ca-a4f6-321386fd6947',//Kim
   friends: [
-    'e582a642-e400-453f-b0f1-4aaa0a419cb5'
+    'e582a642-e400-453f-b0f1-4aaa0a419cb5'//Jane
   ]
 }, {
-  user: 'e7cdc763-c559-4f51-966b-cb3313bcce24',
+  user: 'e7cdc763-c559-4f51-966b-cb3313bcce24',//Sammy
   friends: [
-    'e582a642-e400-453f-b0f1-4aaa0a419cb5',
-    '88c76784-14f6-4ca1-8567-5e2cf23fa23c'
+    'e582a642-e400-453f-b0f1-4aaa0a419cb5',//Jane
+    '88c76784-14f6-4ca1-8567-5e2cf23fa23c'//Dylan
   ]
 }, {
-  user: '88c76784-14f6-4ca1-8567-5e2cf23fa23c',
+  user: '88c76784-14f6-4ca1-8567-5e2cf23fa23c',//Dylan
   friends: [
-    'e7cdc763-c559-4f51-966b-cb3313bcce24'
+    'e7cdc763-c559-4f51-966b-cb3313bcce24'//Sammy
   ]
 }]
 
@@ -84,13 +84,32 @@ function fetchFriends(userhandle, callback) {
 
 function addFriend(userhandle, friendhandle) {
   return new Promise((resolve, reject) => {
-    let foundUsers = users.filter(u => u.handle === userhandle || u.handle === friendhandle)
-    let existingFriend = friends.filter(u => u.user === u.userhandle && u.friends === friendhandle)
-    if (!foundUsers || existingFriend ){
-      console.log("One of them or both don't exist or are already friends")
-      reject()
-    }  else {resolve(['success'])}
-
+    let foundUsers = users.filter(u => u.handle === userhandle || u.handle === friendhandle) //filters over users check if userhandle and friendhandle are valid
+    let userAndFriends = friends.filter(u => u.user === userhandle)// filters over the friends array to pull out the user and the array of friends
+    let friendAndFriends = friends.filter(u => u.user === friendhandle)
+    let existingFriend = userAndFriends.filter(u => u.friends === friendhandle) //filters over the users friends to see if it matches the friendhandle
+    let addFriendArray = [...userAndFriends[0].friends, friendhandle]
+    let addFriendsFriendArray = [...friendAndFriends[0].friends, userhandle]
+    friends.map(u => {
+      switch(u.user){
+        case (userhandle):
+        u.friends = addFriendArray, 
+        console.log("friend 1", u.friends)
+        break
+        case (friendhandle):
+        u.friends = addFriendsFriendArray,
+        console.log("friend 2", u.friends)
+        break
+        default:
+        u = u
+      }
+      })
+    if (!foundUsers){
+      reject("One of them or both don't exist")
+    } else if(!existingFriend === []){
+      console.log(existingFriend)
+      reject("These users are already friends")
+    } else {resolve(userAndFriends)}
     }
   )};
   //You will need to complete this part....
@@ -111,10 +130,11 @@ function addFriend(userhandle, friendhandle) {
 
 
 //This function declaration should be changed in order to say it will carry out async code
-function fetchUser(userhandle) {
+async function fetchUser(userhandle) {
   let randomTime = Math.random() * (8000 - 200) + 200;
-  setTimeout(() => {
+  await setTimeout(() => {
     let user = users.filter(u => u.handle === userhandle)
+    console.log('User Name', user[0].name, 'Friends', friends[4].friends)
     if(user.length === 0) {
       throw new Error('Unknown User')
     } else {
@@ -139,13 +159,15 @@ function main() {
     console.log("We are outside the conditional for errors this must be happy path", friends)
     //add Dylan as a friend
     const results = addFriend('7e6a2835-0389-42ca-a4f6-321386fd6947','88c76784-14f6-4ca1-8567-5e2cf23fa23c')
-    // results
-    // .then ((data) => {
-    //   console.log("I made it here")
-    // })
-    // .catch((error) => {
-    //     console.log('Oh no...', error.msg)
-    // })
+    results
+    .then ((data) => {
+      console.log("I made it here", data)
+      // let newFriendsArray = friends.push(data)
+      fetchUser('88c76784-14f6-4ca1-8567-5e2cf23fa23c')
+    })
+    .catch((error) => {
+        console.log('Oh no something went wrong', error)
+    })
 }
     }
   
