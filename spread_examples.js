@@ -1,6 +1,6 @@
 function main() {
     let users = [{ name: "John" }, { name: "Adam" }, { name: "Ashley"}]
-    let emps = [ { name: "Kim" }, { name: "Dan" }]
+    let emps = [{ name: "Kim" }, { name: "Dan" }]
   
     let combo = [...users, ...emps]
     console.log('Spread Challenge')
